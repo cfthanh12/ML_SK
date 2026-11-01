@@ -16,7 +16,7 @@
     "Stress_Level"
   ],
   "metrics": {
-    "mae": 0.285515145879121,
+    "mae": 0.2855151458791211,
     "rmse": 0.39471013891957935,
     "r2": 0.9101586694387274
   },
@@ -24,5 +24,5 @@
   "cleaning_report": {
     "negative_physical_activity_values_clipped": 10
   },
-  "trained_at_utc": "2026-11-01T12:24:34.320125+00:00"
+  "trained_at_utc": "2026-11-01T16:10:38.315169+00:00"
 }

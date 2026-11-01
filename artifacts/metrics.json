@@ -1,0 +1,28 @@
+{
+  "model_version": "1.0.0",
+  "target_column": "Mental_Health_Score",
+  "feature_columns": [
+    "Age",
+    "Gender",
+    "Country",
+    "Academic_Level",
+    "Most_Used_Platform",
+    "Purpose_Of_Use",
+    "Avg_Daily_Usage_Hours",
+    "Daily_Unlocks",
+    "Study_Hours",
+    "Physical_Activity_Hours",
+    "Sleep_Hours_Per_Night",
+    "Stress_Level"
+  ],
+  "metrics": {
+    "mae": 0.285515145879121,
+    "rmse": 0.39471013891957935,
+    "r2": 0.9101586694387274
+  },
+  "training_rows": 5000,
+  "cleaning_report": {
+    "negative_physical_activity_values_clipped": 10
+  },
+  "trained_at_utc": "2026-11-01T12:24:34.320125+00:00"
+}

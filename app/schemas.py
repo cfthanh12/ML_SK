@@ -71,3 +71,36 @@ class PredictionResponse(BaseModel):
     mental_health_score: float = Field(description="Estimated score on the dataset's 0-10 scale.")
     score_scale: str = "0-10"
     model_version: str
+
+
+class FeatureImportanceItem(BaseModel):
+    """One source feature's holdout permutation importance."""
+
+    feature: str
+    importance: float
+
+
+class CVResultItem(BaseModel):
+    """Cross-validation summary for one candidate model."""
+
+    model: str
+    mae_mean: float
+    mae_std: float
+    rmse_mean: float
+    rmse_std: float
+    r2_mean: float
+    r2_std: float
+
+
+class ModelInfoResponse(BaseModel):
+    """Training metadata exposed for the demo UI and reviewers."""
+
+    model_version: str
+    selected_model: str
+    metrics: dict[str, float]
+    cv_results: list[CVResultItem]
+    feature_columns: list[str]
+    feature_importance: list[FeatureImportanceItem]
+    feature_importance_method: str
+    training_rows: int
+    trained_at_utc: str

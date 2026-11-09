@@ -1,6 +1,7 @@
 """FastAPI service for the student wellbeing demo model."""
 
 import logging
+import math
 import os
 from contextlib import asynccontextmanager
 from pathlib import Path
@@ -78,6 +79,8 @@ def clamp_score(
     maximum: float = 10.0,
 ) -> float:
     """Keep predictions on the dataset's documented scale."""
+    if not math.isfinite(score):
+        raise ValueError("score must be finite")
     return min(maximum, max(minimum, score))
 
 
@@ -142,7 +145,13 @@ def predict(
         raise HTTPException(status_code=503, detail="Model is not loaded.")
 
     features = pd.DataFrame([payload.to_model_features()])
-    score = round(clamp_score(float(artifact["model"].predict(features)[0])), 2)
+    raw_score = float(artifact["model"].predict(features)[0])
+    if not math.isfinite(raw_score):
+        raise HTTPException(
+            status_code=500,
+            detail="Model returned a non-finite score.",
+        )
+    score = round(clamp_score(raw_score), 2)
     model_version = artifact["metadata"].get("model_version", MODEL_VERSION)
     logger.info(
         "Prediction score=%.2f model_version=%s selected_model=%s",

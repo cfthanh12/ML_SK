@@ -127,6 +127,25 @@ def test_extract_feature_importance_returns_sorted_top_features(
     assert all(isinstance(value, float) for value in importances)
 
 
+def test_metrics_are_rounded(synthetic_dataset: pd.DataFrame) -> None:
+    _, metrics, _, _, cv_table, _, importance = train_model(
+        synthetic_dataset, cv=2
+    )
+    for value in metrics.values():
+        assert value == round(value, 6)
+    for column in [
+        "mae_mean",
+        "mae_std",
+        "rmse_mean",
+        "rmse_std",
+        "r2_mean",
+        "r2_std",
+    ]:
+        assert (cv_table[column] == cv_table[column].round(6)).all()
+    for item in importance:
+        assert item["importance"] == round(item["importance"], 6)
+
+
 def test_train_model_returns_cv_and_selection(
     synthetic_dataset: pd.DataFrame,
 ) -> None:

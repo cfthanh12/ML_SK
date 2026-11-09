@@ -174,12 +174,12 @@ def cross_validate_candidates(
             error_score="raise",
         )
         records[name] = {
-            "mae_mean": float(-scores["test_mae"].mean()),
-            "mae_std": float(scores["test_mae"].std()),
-            "rmse_mean": float(-scores["test_rmse"].mean()),
-            "rmse_std": float(scores["test_rmse"].std()),
-            "r2_mean": float(scores["test_r2"].mean()),
-            "r2_std": float(scores["test_r2"].std()),
+            "mae_mean": round(float(-scores["test_mae"].mean()), 6),
+            "mae_std": round(float(scores["test_mae"].std()), 6),
+            "rmse_mean": round(float(-scores["test_rmse"].mean()), 6),
+            "rmse_std": round(float(scores["test_rmse"].std()), 6),
+            "r2_mean": round(float(scores["test_r2"].mean()), 6),
+            "r2_std": round(float(scores["test_r2"].std()), 6),
         }
     table = pd.DataFrame.from_dict(records, orient="index")
     table.index.name = "model"
@@ -207,11 +207,66 @@ def extract_feature_importance(
         scoring="neg_root_mean_squared_error",
     )
     items = [
-        {"feature": str(name), "importance": float(value)}
+        {"feature": str(name), "importance": round(float(value), 6)}
         for name, value in zip(features.columns, result.importances_mean)
     ]
     items.sort(key=lambda item: item["importance"], reverse=True)
     return items[:top_n]
+
+
+def _regression_metrics(
+    y_true: pd.Series,
+    predictions: Any,
+) -> dict[str, float]:
+    """Return rounded holdout metrics shared by training and ablation."""
+    return {
+        "mae": round(float(mean_absolute_error(y_true, predictions)), 6),
+        "rmse": round(float(np.sqrt(mean_squared_error(y_true, predictions))), 6),
+        "r2": round(float(r2_score(y_true, predictions)), 6),
+    }
+
+
+def _evaluate_candidates(
+    features: pd.DataFrame,
+    target: pd.Series,
+    numeric_features: list[str],
+    categorical_features: list[str],
+    cv: int,
+    random_state: int,
+) -> tuple[Pipeline, dict[str, float], pd.DataFrame, pd.DataFrame, str]:
+    """Split, compare candidates, select one, and score it on the holdout."""
+    x_train, x_test, y_train, y_test = train_test_split(
+        features,
+        target,
+        test_size=0.2,
+        random_state=random_state,
+    )
+    models = build_candidate_models(numeric_features, categorical_features)
+    cv_table = cross_validate_candidates(
+        models,
+        x_train,
+        y_train,
+        cv=cv,
+        random_state=random_state,
+    )
+    selected_model = select_best_model(cv_table)
+    model = models[selected_model]
+    model.fit(x_train, y_train)
+    predictions = model.predict(x_test)
+    evaluation = pd.DataFrame(
+        {
+            "actual": y_test.to_numpy(),
+            "predicted": predictions,
+        },
+        index=y_test.index,
+    )
+    return (
+        model,
+        _regression_metrics(y_test, predictions),
+        evaluation,
+        cv_table,
+        selected_model,
+    )
 
 
 def train_model(
@@ -229,38 +284,19 @@ def train_model(
 ]:
     """Select a model by CV on train data, then report on a fixed holdout."""
     features, target, cleaning_report = prepare_dataset(dataset)
-    x_train, x_test, y_train, y_test = train_test_split(
+    model, metrics, evaluation, cv_table, selected_model = _evaluate_candidates(
         features,
         target,
-        test_size=0.2,
-        random_state=random_state,
+        NUMERIC_FEATURES,
+        CATEGORICAL_FEATURES,
+        cv,
+        random_state,
     )
-
-    models = build_candidate_models()
-    cv_table = cross_validate_candidates(
-        models,
-        x_train,
-        y_train,
-        cv=cv,
-        random_state=random_state,
+    feature_importance = extract_feature_importance(
+        model,
+        features.loc[evaluation.index],
+        target.loc[evaluation.index],
     )
-    selected_model = select_best_model(cv_table)
-    model = models[selected_model]
-    model.fit(x_train, y_train)
-    predictions = model.predict(x_test)
-    metrics = {
-        "mae": float(mean_absolute_error(y_test, predictions)),
-        "rmse": float(np.sqrt(mean_squared_error(y_test, predictions))),
-        "r2": float(r2_score(y_test, predictions)),
-    }
-    evaluation = pd.DataFrame(
-        {
-            "actual": y_test.to_numpy(),
-            "predicted": predictions,
-        },
-        index=y_test.index,
-    )
-    feature_importance = extract_feature_importance(model, x_test, y_test)
     model.fit(features, target)
     return (
         model,
@@ -290,29 +326,14 @@ def run_stress_ablation(
         column for column in CATEGORICAL_FEATURES if column in feature_columns
     ]
     features, target, _ = prepare_dataset(dataset, feature_columns=feature_columns)
-    x_train, x_test, y_train, y_test = train_test_split(
+    _, metrics, _, cv_table, selected_model = _evaluate_candidates(
         features,
         target,
-        test_size=0.2,
-        random_state=random_state,
+        numeric_features,
+        categorical_features,
+        cv,
+        random_state,
     )
-    models = build_candidate_models(numeric_features, categorical_features)
-    cv_table = cross_validate_candidates(
-        models,
-        x_train,
-        y_train,
-        cv=cv,
-        random_state=random_state,
-    )
-    selected_model = select_best_model(cv_table)
-    model = models[selected_model]
-    model.fit(x_train, y_train)
-    predictions = model.predict(x_test)
-    metrics = {
-        "mae": float(mean_absolute_error(y_test, predictions)),
-        "rmse": float(np.sqrt(mean_squared_error(y_test, predictions))),
-        "r2": float(r2_score(y_test, predictions)),
-    }
     return {
         "dropped_feature": dropped_feature,
         "selected_model": selected_model,

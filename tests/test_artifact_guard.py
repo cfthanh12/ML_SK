@@ -11,7 +11,9 @@ pytestmark = pytest.mark.skipif(
 
 
 def test_committed_artifact_matches_code() -> None:
-    metadata = joblib.load(DEFAULT_ARTIFACT_PATH)["metadata"]
+    artifact = joblib.load(DEFAULT_ARTIFACT_PATH)
+    metadata = artifact["metadata"]
     assert metadata["model_version"] == MODEL_VERSION
     assert metadata["selected_model"] in build_candidate_models()
     assert metadata["feature_columns"] == FEATURE_COLUMNS
+    assert list(artifact["model"].feature_names_in_) == FEATURE_COLUMNS

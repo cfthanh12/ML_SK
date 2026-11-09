@@ -93,7 +93,7 @@ def fetch_model_info(url: str) -> dict | None:
         response = requests.get(f"{url}/model-info", timeout=10)
         response.raise_for_status()
         return response.json()
-    except requests.RequestException:
+    except (requests.RequestException, ValueError):
         return None
 
 
@@ -129,9 +129,11 @@ with st.sidebar:
     st.divider()
     st.header("Trạng thái API")
     try:
-        health = requests.get(f"{api_url}/health", timeout=5).json()
+        health_response = requests.get(f"{api_url}/health", timeout=5)
+        health_response.raise_for_status()
+        health = health_response.json()
         st.success(f"API: {health.get('status', 'unknown')}")
-    except requests.RequestException:
+    except (requests.RequestException, ValueError):
         st.error("API chưa sẵn sàng")
 
 st.subheader("Kịch bản mẫu")
@@ -251,29 +253,33 @@ if submitted:
                 json=payload,
                 timeout=15,
             )
-            response.raise_for_status()
-            result = response.json()
         except requests.RequestException as exc:
             st.error(
                 f"Không kết nối được API ({api_url}). "
                 f"Hãy khởi động FastAPI trước. Chi tiết: {exc}"
             )
         else:
-            score = result["mental_health_score"]
-            st.metric(
-                "Điểm ước lượng (thang điểm 0-10)",
-                f"{score:.2f}",
-                help=f"Mức tham khảo: {score_label(score)}",
-            )
-            st.progress(min(max(score / 10, 0.0), 1.0))
-            st.caption(
-                "Ngưỡng thấp/trung bình/cao dựa trên phân vị 25/75 của điểm "
-                "trong dữ liệu huấn luyện."
-            )
-            st.info(
-                "Đây là dự đoán từ dữ liệu khảo sát và mô hình học máy, "
-                "không thể dùng để kết luận tình trạng sức khỏe của một cá nhân."
-            )
+            if response.status_code == 422:
+                st.error(f"Dữ liệu không hợp lệ: {response.text}")
+            elif response.status_code >= 400:
+                st.error(f"API trả lỗi {response.status_code}: {response.text}")
+            else:
+                result = response.json()
+                score = result["mental_health_score"]
+                st.metric(
+                    "Điểm ước lượng (thang điểm 0-10)",
+                    f"{score:.2f}",
+                    help=f"Mức tham khảo: {score_label(score)}",
+                )
+                st.progress(min(max(score / 10, 0.0), 1.0))
+                st.caption(
+                    "Ngưỡng thấp/trung bình/cao dựa trên phân vị 25/75 của điểm "
+                    "trong dữ liệu huấn luyện."
+                )
+                st.info(
+                    "Đây là dự đoán từ dữ liệu khảo sát và mô hình học máy, "
+                    "không thể dùng để kết luận tình trạng sức khỏe của một cá nhân."
+                )
 
 st.divider()
 st.caption(f"API: {api_url} · Dùng `/docs` để thử REST API trực tiếp.")

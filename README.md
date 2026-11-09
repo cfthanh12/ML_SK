@@ -210,9 +210,10 @@ docker build -t student-wellbeing .
 docker run -p 8000:8000 student-wellbeing
 ```
 
-Image dùng `python:3.14-slim` và copy artifact đã huấn luyện, không train lúc
-build. Lệnh build chưa được xác nhận trên máy tác giả vì Docker daemon đang tắt;
-hãy chạy lại ở máy có Docker Desktop.
+Image dùng `python:3.14-slim`, chỉ cài dependency runtime từ
+`requirements-api.txt`, chạy bằng user không phải root, có `HEALTHCHECK`, và copy
+artifact đã huấn luyện (không train lúc build). Lệnh build chưa được xác nhận trên
+máy tác giả vì Docker daemon đang tắt; hãy chạy lại ở máy có Docker Desktop.
 
 ## Kiểm thử
 
@@ -245,10 +246,11 @@ requirements.txt
 Đây là đồ án/demo học máy dựa trên dữ liệu khảo sát, không phải công cụ chẩn đoán,
 sàng lọc hay tư vấn sức khỏe tinh thần. Kết quả là ước lượng thống kê, không chứng
 minh quan hệ nhân quả và không nên dùng để ra quyết định về cá nhân. Mô hình chỉ
-được huấn luyện trên độ tuổi 18-24; API giới hạn tuổi trong phạm vi này. Một số
-giá trị phân loại mới (ví dụ quốc gia không xuất hiện trong tập huấn luyện) được
-mã hóa an toàn như nhóm chưa thấy, nhưng chất lượng dự đoán ngoài phân phối không
-được đảm bảo. `Country` có permutation importance khá cao dù 1.880 dòng là
+được huấn luyện trên độ tuổi 18-24; API giới hạn tuổi trong phạm vi này. Riêng
+`country` là chuỗi tự do, nên quốc gia chưa xuất hiện trong tập huấn luyện được
+mã hóa an toàn như nhóm chưa thấy; các trường phân loại còn lại được giới hạn
+bằng `Literal` và trả 422 nếu ngoài danh sách. Chất lượng dự đoán ngoài phân phối
+không được đảm bảo. `Country` có permutation importance khá cao dù 1.880 dòng là
 `"Other"`, nên không nên diễn giải đây là khác biệt thực sự giữa các quốc gia.
 
 Xem thêm [docs/model_card.md](docs/model_card.md).

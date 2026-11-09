@@ -70,8 +70,9 @@ không phải khác biệt thực sự; cần thận trọng khi diễn giải.
 - Tương quan không phải nhân quả; không thể kết luận "dùng mạng xã hội nhiều gây
   điểm thấp" từ mô hình này.
 - Chỉ huấn luyện cho độ tuổi 18-24; API từ chối tuổi ngoài phạm vi.
-- Quốc gia/danh mục chưa thấy được mã hóa thành nhóm chưa biết; chất lượng dự
-  đoán ngoài phân phối không được đảm bảo.
+- Quốc gia chưa thấy được mã hóa thành nhóm chưa biết; các trường phân loại khác
+  bị giới hạn bằng `Literal` và trả 422 nếu ngoài danh sách. Chất lượng dự đoán
+  ngoài phân phối không được đảm bảo.
 - Dữ liệu có thể là tổng hợp; R² cao không đồng nghĩa mô hình dùng được trong
   thực tế.
 - Không dùng cho chẩn đoán, sàng lọc, hay quyết định về một cá nhân.

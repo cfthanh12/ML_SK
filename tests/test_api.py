@@ -80,6 +80,11 @@ def test_clamp_score_bounds() -> None:
     assert clamp_score(6.42) == 6.42
 
 
+def test_clamp_score_rejects_nan() -> None:
+    with pytest.raises(ValueError, match="finite"):
+        clamp_score(float("nan"))
+
+
 def test_load_artifact_missing_raises(tmp_path) -> None:
     with pytest.raises(FileNotFoundError, match="python -m app.train"):
         load_artifact(tmp_path / "missing.joblib")
@@ -130,6 +135,17 @@ def test_predict_clamps_out_of_range_prediction(
 
     assert response.status_code == 200
     assert response.json()["mental_health_score"] == expected
+
+
+def test_predict_rejects_nan_prediction(client, monkeypatch) -> None:
+    monkeypatch.setitem(
+        client.app.state.artifact, "model", _FixedModel(float("nan"))
+    )
+
+    response = client.post("/predict", json=SAMPLE_INPUT)
+
+    assert response.status_code == 500
+    assert "non-finite" in response.json()["detail"]
 
 
 def test_app_logger_is_configured() -> None:

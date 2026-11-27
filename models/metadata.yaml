@@ -1,0 +1,60 @@
+model_name: student-mental-health-score
+model_version: 1.2.0
+trained_at_utc: '2026-11-21T09:17:50.574972+00:00'
+artifact: models/mental_health_model.joblib
+task: regression
+target: Mental_Health_Score
+score_scale:
+- 0
+- 10
+algorithm: RandomForestRegressor
+selected_model: random_forest
+hyperparameters:
+  bootstrap: true
+  ccp_alpha: 0.0
+  criterion: squared_error
+  max_depth: null
+  max_features: 0.5
+  max_leaf_nodes: null
+  max_samples: null
+  min_impurity_decrease: 0.0
+  min_samples_leaf: 1
+  min_samples_split: 2
+  min_weight_fraction_leaf: 0.0
+  monotonic_cst: null
+  n_estimators: 200
+  n_jobs: -1
+  oob_score: false
+  random_state: 42
+  verbose: 0
+  warm_start: false
+data:
+  source: data/raw/Student Social Media And Mental Health Impact.csv
+  rows: 5000
+  split:
+    test_size: 0.2
+    random_state: 42
+  cleaning:
+    negative_physical_activity_values_clipped: 10
+    duplicate_rows_kept: 2
+features:
+  numeric:
+  - Age
+  - Avg_Daily_Usage_Hours
+  - Daily_Unlocks
+  - Study_Hours
+  - Physical_Activity_Hours
+  - Sleep_Hours_Per_Night
+  categorical:
+  - Gender
+  - Country
+  - Academic_Level
+  - Most_Used_Platform
+  - Purpose_Of_Use
+  - Stress_Level
+metrics_holdout:
+  mae: 0.2761
+  rmse: 0.3762
+  r2: 0.9184
+intended_use: Học tập/demo; không dùng để chẩn đoán sức khỏe tinh thần.
+details: reports/metrics.json, docs/model_card.md

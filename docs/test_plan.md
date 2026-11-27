@@ -1,7 +1,7 @@
 # Kế hoạch và kịch bản kiểm thử (v1.2.0)
 
-Chạy toàn bộ: `python -m pytest -q` (86 ca, khoảng 1 phút). GitHub Actions chạy lại mỗi lần push
-(`.github/workflows/ci.yml`). Lần chạy gần nhất: **86/86 đạt**.
+Chạy toàn bộ: `python -m pytest -q` (90 ca, khoảng 1 phút). GitHub Actions chạy lại mỗi lần push
+(`.github/workflows/ci.yml`). Lần chạy gần nhất: **90/90 đạt**.
 
 Bộ test giữ nguyên cách làm của bản nộp: phần API và huấn luyện chạy trên **dữ liệu tổng hợp**
 do `tests/conftest.py` tạo và một artifact tạm, nên chạy được trên máy sạch. Các nhóm mới
@@ -21,6 +21,7 @@ do `tests/conftest.py` tạo và một artifact tạm, nên chạy được trê
 | tests/test_behaviour.py | 8 | Mới | Kiểm thử hành vi trên dữ liệu thật |
 | tests/test_data.py | 7 | Mới | Kiểm tra dữ liệu thật |
 | tests/test_evaluate.py | 3 | Mới | Công thức R² hiệu chỉnh, chỉ số đánh giá |
+| tests/test_preprocess.py | 4 | Mới | Xuất dữ liệu từng bước tiền xử lý, metadata.yaml khớp artifact |
 
 ## Kịch bản kiểm thử API mới (tests/test_api_extensions.py)
 
@@ -71,6 +72,10 @@ test theo dõi hạn chế đã biết; nếu mô hình mới hết lệch thì 
 | TC-D05 | Dòng trùng | Báo cáo đúng 2 dòng |
 | TC-D06 | Chia train/holdout | 4.000/1.000, không giao nhau |
 | TC-D07 | Biến gây nhiễu nền tảng–quốc gia | LINE (Japan, 50), KakaoTalk (South Korea, 36), WeChat (China, 36), VKontakte (Russia, 40): mỗi nền tảng đúng 1 quốc gia |
+| TC-D08 | Xuất data/processed | Đủ 5 file: cleaned, train, holdout, encoded_train_sample, preprocessing_report |
+| TC-D09 | Làm sạch và chia tập trong file xuất | 5.000 dòng, không còn giá trị âm; 4.000/1.000 không giao nhau, khớp cột `split` |
+| TC-D10 | Dữ liệu sau mã hóa | 134 cột (6 số + 128 one-hot); mỗi dòng có đúng 6 giá trị 1 (một cho mỗi biến phân loại) |
+| TC-M01 | models/metadata.yaml | Phiên bản, thời điểm huấn luyện, R² khớp với file mô hình |
 
 ## Kịch bản kiểm thử thủ công giao diện
 

@@ -21,9 +21,17 @@ trừ những chỗ ghi dưới đây. Lý do từng thay đổi xem `docs/yeu_c
 - `streamlit_app.py`: giữ sidebar và kịch bản mẫu; thêm ô chọn quốc gia từ `/model-info`, hộp cảnh báo, biểu đồ what-if.
 - `Dockerfile`: chép thêm `config/`, tạo `logs/`.
 
-## Kiểm thử: 46 → 86 ca
-- Mới: `test_api_extensions.py` (22), `test_behaviour.py` (8), `test_data.py` (7), `test_evaluate.py` (3).
+## Kiểm thử: 46 → 90 ca
+- Mới: `test_api_extensions.py` (22), `test_behaviour.py` (8), `test_data.py` (7), `test_evaluate.py` (3), `test_preprocess.py` (4).
 - Sửa: `test_training.py` (phiên bản lấy từ code, kiểm tra `training_profile`), `test_report_figures.py` (12 hình), `test_report_docx.py` (file v2, số liệu đọc từ metrics.json).
+
+## Bổ sung theo ML Project Template Structure
+- `data/processed/`: kết quả từng bước tiền xử lý (`python -m app.preprocess`, module mới `app/preprocess.py`). Mô hình không đọc các file này.
+- `data/external/`: thư mục dành cho dữ liệu ngoài, kèm README.
+- `models/metadata.yaml`: tóm tắt mô hình dạng YAML; `app/train.py` ghi file này mỗi lần huấn luyện.
+- `docs/data_dictionary.md`: mô tả 13 cột, đơn vị, khoảng giá trị, ánh xạ sang trường API.
+- README: bảng đối chiếu từng mục template với vị trí trong dự án.
+- Dọn bản cũ: xóa `artifacts/` (model cũ 57 MB) và CSV trùng ở thư mục gốc; chuyển `yeu_cau_do_an.png` vào `docs/`.
 
 ## Báo cáo
 - `Bao_cao_do_an_ML_v2.docx` (file cũ giữ nguyên ở bản nộp): khoảng 53 trang khi mở bằng LibreOffice, 12 hình, 21 bảng.

@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Any
 
 import joblib
+import yaml
 import numpy as np
 import pandas as pd
 from sklearn.compose import ColumnTransformer
@@ -34,6 +35,7 @@ from app.features import (
 DEFAULT_DATA_PATH = PROJECT_ROOT / "data" / "raw" / "Student Social Media And Mental Health Impact.csv"
 DEFAULT_ARTIFACT_PATH = PROJECT_ROOT / "models" / "mental_health_model.joblib"
 DEFAULT_METRICS_PATH = PROJECT_ROOT / "reports" / "metrics.json"
+DEFAULT_METADATA_YAML_PATH = PROJECT_ROOT / "models" / "metadata.yaml"
 
 
 def load_dataset(data_path: Path = DEFAULT_DATA_PATH) -> pd.DataFrame:
@@ -403,7 +405,47 @@ def save_artifacts(
         json.dumps(metadata, ensure_ascii=False, indent=2),
         encoding="utf-8",
     )
+    write_metadata_yaml(model, metadata, artifact_path.parent / "metadata.yaml")
     return metadata
+
+
+def write_metadata_yaml(model: Pipeline, metadata: dict[str, Any], path: Path) -> dict[str, Any]:
+    """Short, human-readable model card in YAML (the "Metadata File" of the course template).
+
+    Full details (CV table, importance, ablation, training profile) stay in reports/metrics.json.
+    """
+    regressor = model.named_steps["regressor"]
+    params = {
+        key: value
+        for key, value in regressor.get_params().items()
+        if isinstance(value, (int, float, str, bool)) or value is None
+    }
+    summary = {
+        "model_name": "student-mental-health-score",
+        "model_version": metadata["model_version"],
+        "trained_at_utc": metadata["trained_at_utc"],
+        "artifact": "models/mental_health_model.joblib",
+        "task": "regression",
+        "target": metadata["target_column"],
+        "score_scale": [0, 10],
+        "algorithm": type(regressor).__name__,
+        "selected_model": metadata["selected_model"],
+        "hyperparameters": params,
+        "data": {
+            "source": "data/raw/Student Social Media And Mental Health Impact.csv",
+            "rows": metadata["training_rows"],
+            "split": {"test_size": TEST_SIZE, "random_state": RANDOM_STATE},
+            "cleaning": metadata["cleaning_report"],
+        },
+        "features": {"numeric": list(NUMERIC_FEATURES), "categorical": list(CATEGORICAL_FEATURES)},
+        "metrics_holdout": {k: round(float(v), 4) for k, v in metadata["metrics"].items()},
+        "intended_use": "Học tập/demo; không dùng để chẩn đoán sức khỏe tinh thần.",
+        "details": "reports/metrics.json, docs/model_card.md",
+    }
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(
+        yaml.safe_dump(summary, allow_unicode=True, sort_keys=False), encoding="utf-8")
+    return summary
 
 
 def train_and_save(

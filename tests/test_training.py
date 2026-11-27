@@ -205,6 +205,7 @@ def test_save_artifacts_writes_json_metadata(
     assert payload["feature_importance_method"] == "permutation"
     assert payload["stress_ablation"]["dropped_feature"] == "Stress_Level"
     assert artifact_path.is_file()
+    assert (tmp_path / "metadata.yaml").is_file()
 
 
 def test_train_and_save_end_to_end(

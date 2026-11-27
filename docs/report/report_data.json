@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-11-22T11:31:50.276462+00:00",
+  "generated_at_utc": "2026-11-27T21:48:55.432856+00:00",
   "model_version": "1.2.0",
   "selected_model": "random_forest",
   "trained_at_utc": "2026-11-21T09:17:50.574972+00:00",
@@ -726,5 +726,5 @@
       "what_if_usage.png"
     ]
   },
-  "test_count": 86
+  "test_count": 90
 }

@@ -66,18 +66,43 @@ và learning curve trong `reports/experiments.json`, [docs/model_card.md](docs/m
 ## Cấu trúc thư mục
 
 ```
-app/                 # features, schemas, train, evaluate, main (API)
+app/                 # features, preprocess, schemas, train, evaluate, main (API)
 config/params.yaml   # siêu tham số, ngưỡng cảnh báo, ngưỡng độ trễ
-data/raw/            # dữ liệu gốc, không chỉnh sửa
-docs/                # model card, kế hoạch kiểm thử, đối chiếu yêu cầu, thay đổi, report/
-models/              # mental_health_model.joblib
+data/
+  raw/               # dữ liệu gốc, không chỉnh sửa
+  processed/         # kết quả từng bước tiền xử lý (python -m app.preprocess), chỉ để xem
+  external/          # dành cho dữ liệu ngoài (hiện không dùng)
+docs/                # data dictionary, model card, kế hoạch kiểm thử, đối chiếu yêu cầu, report/
+models/              # mental_health_model.joblib, metadata.yaml
 notebooks/           # 01_eda, 02_model_training, 03_inference
 reports/             # metrics.json, experiments.json, figures/
 scripts/             # sinh dữ liệu/hình và dựng báo cáo Word
-tests/               # 86 test
+tests/               # 90 test
 logs/                # app.log của API
 streamlit_app.py, Dockerfile, requirements*.txt, .github/workflows/ci.yml
 ```
+
+### Đối chiếu với ML Project Template Structure của môn
+
+| Mục trong template | Vị trí trong dự án |
+|---|---|
+| Data: raw / processed / external | `data/raw/`, `data/processed/`, `data/external/` |
+| Notebooks: exploratory / modeling / inference | `notebooks/01_eda`, `02_model_training`, `03_inference` |
+| Scripts: preprocessing | `app/features.py` (định nghĩa biến), `app/preprocess.py`, `prepare_dataset` + `build_pipeline` trong `app/train.py` |
+| Scripts: model | `app/train.py` |
+| Scripts: evaluation | `app/evaluate.py` |
+| Scripts: utilities | `app/schemas.py`, `scripts/` (sinh hình, dựng báo cáo) |
+| Models | `models/mental_health_model.joblib` |
+| Metadata file | `models/metadata.yaml` (chi tiết đầy đủ: `reports/metrics.json`) |
+| Documentation | `README.md`, `docs/data_dictionary.md`, `docs/model_card.md`, `docs/test_plan.md` |
+| Results | `reports/` |
+| Config | `config/params.yaml` |
+| Environment | `requirements.txt`, `requirements-api.txt`, `Dockerfile` |
+| Tests | `tests/` + `.github/workflows/ci.yml` |
+| Logs | `logs/` |
+| Saved objects | `models/` |
+
+Code nằm trong `app/` (thay vì `src/`) vì đây là package chạy API: `uvicorn app.main:app`.
 
 ## Cài đặt và chạy trên Windows
 
@@ -92,11 +117,12 @@ pandas 3.1.0). Nếu dùng phiên bản Python khác, có thể cần nới pin.
 
 | Bước | Lệnh | Kết quả |
 |---|---|---|
-| 1. Huấn luyện | `python -m app.train` | `models/mental_health_model.joblib`, `reports/metrics.json` (khoảng 40 giây) |
+| 0. Xem dữ liệu đã xử lý (tùy chọn) | `python -m app.preprocess` | `data/processed/*.csv`, `preprocessing_report.json` (vài giây) |
+| 1. Huấn luyện | `python -m app.train` | `models/mental_health_model.joblib`, `models/metadata.yaml`, `reports/metrics.json` (khoảng 40 giây) |
 | 2. Đánh giá mở rộng | `python -m app.evaluate` | `reports/experiments.json`, `reports/figures/*.png` (8-10 phút; `--skip-tuning` nhanh hơn) |
 | 3. API | `uvicorn app.main:app --reload` | http://127.0.0.1:8000/docs |
 | 4. Giao diện (PowerShell thứ hai) | `streamlit run streamlit_app.py` | http://localhost:8501 |
-| 5. Kiểm thử | `python -m pytest -q` | 86 test |
+| 5. Kiểm thử | `python -m pytest -q` | 90 test |
 
 Biến môi trường: `MODEL_ARTIFACT_PATH` (đổi file mô hình cho API), `API_URL` (địa chỉ API cho Streamlit).
 

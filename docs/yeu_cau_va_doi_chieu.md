@@ -62,12 +62,14 @@ Ký hiệu: ✅ đã có trong bản nộp · 🆕 bổ sung trong v1.2.0 · ⚠
 | Thành phần | Bản nộp | v1.2.0 |
 |---|---|---|
 | data/raw | CSV ở thư mục gốc | 🆕 `data/raw/` |
+| data/processed | không có | 🆕 `data/processed/` (cleaned, train, holdout, mẫu sau mã hóa, báo cáo) tạo bằng `python -m app.preprocess` |
+| data/external | không có | 🆕 `data/external/` (README: hiện không dùng nguồn ngoài) |
 | notebooks (exploratory, modeling, inference) | 1 notebook | 🆕 3 notebook |
-| models | `artifacts/` | 🆕 `models/` |
+| models | `artifacts/` | 🆕 `models/` + `metadata.yaml` |
 | reports / results | không có | 🆕 `reports/` (metrics, experiments, figures) |
 | config | hằng số trong code | 🆕 `config/params.yaml` |
-| docs | model_card | ✅ + 🆕 test_plan, yeu_cau_va_doi_chieu, thay_doi_v1.2 |
-| tests | 46 ca | 🆕 86 ca |
+| docs | model_card | ✅ + 🆕 data_dictionary, test_plan, yeu_cau_va_doi_chieu, thay_doi_v1.2, yeu_cau_do_an.png |
+| tests | 46 ca | 🆕 90 ca |
 | logs | không có | 🆕 `logs/app.log` |
 | requirements | ✅ pin phiên bản | ✅ + pyyaml |
 | Dockerfile | ✅ | ✅ sửa để chép `config/` |

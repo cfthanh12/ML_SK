@@ -106,7 +106,11 @@ export function chaptersSixToNine(data) {
     p(
       "Từ phiên bản 1.2.0, thư mục dự án được sắp xếp theo tài liệu ML Project " +
         "Template Structure của môn: dữ liệu gốc nằm trong data/raw và không bị sửa; " +
-        "mô hình đã huấn luyện nằm trong models; chỉ số, kết quả thực nghiệm và hình " +
+        "kết quả từng bước tiền xử lý (làm sạch, chia tập, mã hóa one-hot) được xuất ra " +
+        "data/processed bằng python -m app.preprocess để kiểm tra, còn mô hình luôn " +
+        "chạy lại các bước này trong pipeline; data/external dành cho dữ liệu ngoài " +
+        "(hiện không dùng); từ điển dữ liệu nằm ở docs/data_dictionary.md; " +
+        "mô hình đã huấn luyện và file metadata.yaml nằm trong models; chỉ số, kết quả thực nghiệm và hình " +
         "nằm trong reports; cấu hình nằm trong config; log của API nằm trong logs; " +
         "notebook chia theo ba vai trò khám phá, xây dựng mô hình và suy luận. Tệp " +
         ".github/workflows/ci.yml chạy toàn bộ kiểm thử trên GitHub Actions mỗi lần " +
@@ -346,6 +350,10 @@ export function chaptersSixToNine(data) {
         [
           "tests/test_data.py",
           "Trên dữ liệu thật: đủ cột và 5.000 dòng, không thiếu giá trị, điểm trong 0–10, chặn 10 giá trị âm mà không sửa CSV, báo 2 dòng trùng, train/holdout không giao nhau; LINE, KakaoTalk, WeChat, VKontakte mỗi nền tảng chỉ gắn với 1 quốc gia (kiểm tra biến gây nhiễu)",
+        ],
+        [
+          "tests/test_preprocess.py",
+          "Xuất đủ 5 file trong data/processed, làm sạch và chia tập khớp với huấn luyện, dữ liệu sau mã hóa có 134 cột, models/metadata.yaml khớp file mô hình",
         ],
         [
           "tests/test_evaluate.py",

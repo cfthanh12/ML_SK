@@ -168,20 +168,24 @@ export function chaptersTenToThirteen(data) {
     code(
       "app/\n" +
         "  features.py      # tên cột, phiên bản, đọc config/params.yaml\n" +
+        "  preprocess.py    # xuất dữ liệu từng bước tiền xử lý ra data/processed\n" +
         "  schemas.py       # Pydantic request/response\n" +
         "  train.py         # pipeline, cross-validation, chọn mô hình, ablation, lưu artifact\n" +
         "  evaluate.py      # đánh giá mở rộng, tinh chỉnh, learning curve, kiểm thử hành vi\n" +
         "  main.py          # FastAPI: /health, /model-info, /predict, /predict/batch\n" +
         "config/params.yaml # siêu tham số, ngưỡng cảnh báo, ngưỡng độ trễ\n" +
-        "data/raw/          # CSV gốc, không chỉnh sửa\n" +
+        "data/\n" +
+        "  raw/             # CSV gốc, không chỉnh sửa\n" +
+        "  processed/       # cleaned, train, holdout, encoded_train_sample, preprocessing_report\n" +
+        "  external/        # dành cho dữ liệu ngoài (hiện không dùng)\n" +
         "models/\n" +
-        "  mental_health_model.joblib\n" +
+        "  mental_health_model.joblib, metadata.yaml\n" +
         "reports/\n" +
         "  metrics.json, experiments.json, figures/\n" +
         "notebooks/\n" +
         "  01_eda.ipynb, 02_model_training.ipynb, 03_inference.ipynb\n" +
         "docs/\n" +
-        "  model_card.md, test_plan.md, yeu_cau_va_doi_chieu.md, report/\n" +
+        "  data_dictionary.md, model_card.md, test_plan.md, yeu_cau_va_doi_chieu.md, report/\n" +
         "logs/              # app.log của API\n" +
         "scripts/\n" +
         "  report_figures.py    # sinh dữ liệu và hình cho báo cáo\n" +
@@ -190,7 +194,7 @@ export function chaptersTenToThirteen(data) {
         "  content/             # nội dung từng chương\n" +
         "tests/\n" +
         "  conftest.py, test_api.py, test_api_extensions.py, test_schemas.py,\n" +
-        "  test_training.py, test_evaluate.py, test_data.py, test_behaviour.py,\n" +
+        "  test_training.py, test_evaluate.py, test_data.py, test_behaviour.py, test_preprocess.py,\n" +
         "  test_artifact_guard.py, test_report_figures.py, test_report_docx.py\n" +
         ".github/workflows/ci.yml\n" +
         "streamlit_app.py\n" +

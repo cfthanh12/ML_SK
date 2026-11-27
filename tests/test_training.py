@@ -4,7 +4,12 @@ import pandas as pd
 import pytest
 from sklearn.linear_model import LinearRegression
 
-from app.features import CATEGORICAL_FEATURES, FEATURE_COLUMNS, NUMERIC_FEATURES
+from app.features import (
+    CATEGORICAL_FEATURES,
+    FEATURE_COLUMNS,
+    MODEL_VERSION,
+    NUMERIC_FEATURES,
+)
 from app.train import (
     build_candidate_models,
     build_pipeline,
@@ -195,7 +200,7 @@ def test_save_artifacts_writes_json_metadata(
         metrics_path=metrics_path,
     )
     payload = json.loads(metrics_path.read_text(encoding="utf-8"))
-    assert payload["model_version"] == "1.1.0"
+    assert payload["model_version"] == MODEL_VERSION
     assert payload["selected_model"] == selected
     assert payload["feature_importance_method"] == "permutation"
     assert payload["stress_ablation"]["dropped_feature"] == "Stress_Level"
@@ -214,3 +219,6 @@ def test_train_and_save_end_to_end(
         cv=2,
     )
     assert metadata["training_rows"] == len(synthetic_dataset)
+    profile = metadata["training_profile"]
+    assert set(profile["numeric_ranges"]) == set(NUMERIC_FEATURES)
+    assert sum(profile["country_counts"].values()) == len(synthetic_dataset)

@@ -25,14 +25,15 @@ from app.features import (
     FEATURE_COLUMNS,
     MODEL_VERSION,
     NUMERIC_FEATURES,
+    PARAMS,
+    PROJECT_ROOT,
     RANDOM_STATE,
     TARGET_COLUMN,
+    TEST_SIZE,
 )
-
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_DATA_PATH = PROJECT_ROOT / "Student Social Media And Mental Health Impact.csv"
-DEFAULT_ARTIFACT_PATH = PROJECT_ROOT / "artifacts" / "mental_health_model.joblib"
-DEFAULT_METRICS_PATH = PROJECT_ROOT / "artifacts" / "metrics.json"
+DEFAULT_DATA_PATH = PROJECT_ROOT / "data" / "raw" / "Student Social Media And Mental Health Impact.csv"
+DEFAULT_ARTIFACT_PATH = PROJECT_ROOT / "models" / "mental_health_model.joblib"
+DEFAULT_METRICS_PATH = PROJECT_ROOT / "reports" / "metrics.json"
 
 
 def load_dataset(data_path: Path = DEFAULT_DATA_PATH) -> pd.DataFrame:
@@ -81,8 +82,19 @@ def prepare_dataset(
         prepared["Physical_Activity_Hours"] = prepared[
             "Physical_Activity_Hours"
         ].clip(lower=0)
-    report = {"negative_physical_activity_values_clipped": negative_activity_count}
+    report = {
+        "negative_physical_activity_values_clipped": negative_activity_count,
+        "duplicate_rows_kept": int(prepared.duplicated().sum()),
+    }
     return prepared[feature_columns], prepared[TARGET_COLUMN], report
+
+
+def make_random_forest(params: dict | None = None) -> RandomForestRegressor:
+    """Random Forest with the tuned hyperparameters from config/params.yaml."""
+    return RandomForestRegressor(
+        **(params if params is not None else PARAMS["random_forest"]),
+        random_state=RANDOM_STATE,
+    )
 
 
 def build_pipeline(
@@ -98,12 +110,7 @@ def build_pipeline(
         else categorical_features
     )
     if regressor is None:
-        regressor = RandomForestRegressor(
-            n_estimators=300,
-            min_samples_leaf=2,
-            random_state=RANDOM_STATE,
-            n_jobs=-1,
-        )
+        regressor = make_random_forest()
     preprocessing = ColumnTransformer(
         transformers=[
             ("numeric", "passthrough", numeric),
@@ -131,15 +138,9 @@ def build_candidate_models(
     regressors = {
         "baseline_dummy": DummyRegressor(strategy="mean"),
         "linear_regression": LinearRegression(),
-        "random_forest": RandomForestRegressor(
-            n_estimators=300,
-            min_samples_leaf=2,
-            random_state=RANDOM_STATE,
-            n_jobs=-1,
-        ),
+        "random_forest": make_random_forest(),
         "hist_gradient_boosting": HistGradientBoostingRegressor(
-            max_iter=300,
-            learning_rate=0.1,
+            **PARAMS["hist_gradient_boosting"],
             random_state=RANDOM_STATE,
         ),
     }
@@ -202,7 +203,7 @@ def extract_feature_importance(
         model,
         features,
         target,
-        n_repeats=5,
+        n_repeats=5,  # 5 lần cho nhanh khi huấn luyện; app/evaluate.py dùng 10
         random_state=RANDOM_STATE,
         scoring="neg_root_mean_squared_error",
     )
@@ -238,7 +239,7 @@ def _evaluate_candidates(
     x_train, x_test, y_train, y_test = train_test_split(
         features,
         target,
-        test_size=0.2,
+        test_size=TEST_SIZE,
         random_state=random_state,
     )
     models = build_candidate_models(numeric_features, categorical_features)
@@ -342,6 +343,29 @@ def run_stress_ablation(
     }
 
 
+def describe_training_data(features: pd.DataFrame) -> dict[str, Any]:
+    """Value ranges and categories seen in training, so the API can flag inputs
+    outside the training distribution (a random forest does not extrapolate)."""
+    numeric = [column for column in NUMERIC_FEATURES if column in features.columns]
+    categorical = [column for column in CATEGORICAL_FEATURES if column in features.columns]
+    return {
+        "numeric_ranges": {
+            column: [float(features[column].min()), float(features[column].max())]
+            for column in numeric
+        },
+        "categories": {
+            column: sorted(features[column].astype(str).unique().tolist())
+            for column in categorical
+        },
+        "country_counts": {
+            str(key): int(value)
+            for key, value in features["Country"].value_counts().items()
+        }
+        if "Country" in features.columns
+        else {},
+    }
+
+
 def save_artifacts(
     model: Pipeline,
     metrics: dict[str, float],
@@ -351,6 +375,7 @@ def save_artifacts(
     selected_model: str,
     feature_importance: list[dict[str, Any]],
     stress_ablation: dict[str, Any] | None = None,
+    training_profile: dict[str, Any] | None = None,
     artifact_path: Path = DEFAULT_ARTIFACT_PATH,
     metrics_path: Path = DEFAULT_METRICS_PATH,
 ) -> dict[str, Any]:
@@ -367,11 +392,13 @@ def save_artifacts(
         "stress_ablation": stress_ablation,
         "training_rows": training_rows,
         "cleaning_report": cleaning_report,
+        "training_profile": training_profile or {},
         "trained_at_utc": datetime.now(timezone.utc).isoformat(),
     }
     artifact_path.parent.mkdir(parents=True, exist_ok=True)
     metrics_path.parent.mkdir(parents=True, exist_ok=True)
-    joblib.dump({"model": model, "metadata": metadata}, artifact_path)
+    # compress=3: file nhỏ hơn nhiều (GitHub cảnh báo file > 50 MB); dự đoán không đổi.
+    joblib.dump({"model": model, "metadata": metadata}, artifact_path, compress=3)
     metrics_path.write_text(
         json.dumps(metadata, ensure_ascii=False, indent=2),
         encoding="utf-8",
@@ -397,6 +424,7 @@ def train_and_save(
         feature_importance,
     ) = train_model(dataset, cv=cv)
     stress_ablation = run_stress_ablation(dataset, cv=cv)
+    features, _, _ = prepare_dataset(dataset)
     return save_artifacts(
         model=model,
         metrics=metrics,
@@ -406,6 +434,7 @@ def train_and_save(
         selected_model=selected_model,
         feature_importance=feature_importance,
         stress_ablation=stress_ablation,
+        training_profile=describe_training_data(features),
         artifact_path=artifact_path,
         metrics_path=metrics_path,
     )

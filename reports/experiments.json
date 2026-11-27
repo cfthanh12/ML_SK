@@ -1,0 +1,321 @@
+{
+  "n_rows": 5000,
+  "split": {
+    "train": 4000,
+    "test": 1000
+  },
+  "cleaning": {
+    "negative_physical_activity_values_clipped": 10,
+    "duplicate_rows_kept": 2
+  },
+  "holdout_comparison": [
+    {
+      "model": "Baseline (trung bình)",
+      "holdout_mae": 1.11305735,
+      "holdout_rmse": 1.316884442775827,
+      "holdout_r2": -3.441252872593559e-05,
+      "holdout_adjusted_r2": -0.15495303828462115,
+      "train_r2": 0.0,
+      "n_predictors_after_encoding": 134,
+      "fit_seconds": 0.02692480500002148,
+      "predict_ms_per_row": 0.010220370999945771
+    },
+    {
+      "model": "Linear Regression",
+      "holdout_mae": 0.4691782018009203,
+      "holdout_rmse": 0.5985903014699914,
+      "holdout_r2": 0.7933768573321641,
+      "holdout_adjusted_r2": 0.7613681855200369,
+      "train_r2": 0.7820108570838745,
+      "n_predictors_after_encoding": 134,
+      "fit_seconds": 0.05338648600002216,
+      "predict_ms_per_row": 0.012410508000016307
+    },
+    {
+      "model": "HistGradientBoosting",
+      "holdout_mae": 0.3017526704807015,
+      "holdout_rmse": 0.39757643763469097,
+      "holdout_r2": 0.9088491156010514,
+      "holdout_adjusted_r2": 0.8947286317750871,
+      "train_r2": 0.9716952208987646,
+      "n_predictors_after_encoding": 134,
+      "fit_seconds": 1.428710881000029,
+      "predict_ms_per_row": 0.0191302179999866
+    },
+    {
+      "model": "Random Forest ban đầu (v1.1.0)",
+      "holdout_mae": 0.2854468178007179,
+      "holdout_rmse": 0.3947701828198777,
+      "holdout_r2": 0.9101313337629142,
+      "holdout_adjusted_r2": 0.8962094825770536,
+      "train_r2": 0.9774923229103847,
+      "n_predictors_after_encoding": 134,
+      "fit_seconds": 3.6086305400000356,
+      "predict_ms_per_row": 0.08334773900003256
+    },
+    {
+      "model": "Random Forest đã tinh chỉnh (v1.2.0)",
+      "holdout_mae": 0.2760969666666669,
+      "holdout_rmse": 0.37624100434908914,
+      "holdout_r2": 0.9183696119836651,
+      "holdout_adjusted_r2": 0.9057239796204409,
+      "train_r2": 0.9882217002625671,
+      "n_predictors_after_encoding": 134,
+      "fit_seconds": 1.7640754249999873,
+      "predict_ms_per_row": 0.06450799300000654
+    },
+    {
+      "model": "Random Forest bỏ Country",
+      "holdout_mae": 0.3365279750000001,
+      "holdout_rmse": 0.4474446441691143,
+      "holdout_r2": 0.8845488565047669,
+      "holdout_adjusted_r2": 0.8808515574878741,
+      "train_r2": 0.9828877174868009,
+      "n_predictors_after_encoding": 31,
+      "fit_seconds": 1.1665607050000517,
+      "predict_ms_per_row": 0.07156386400004067
+    }
+  ],
+  "learning_curve": {
+    "train_sizes": [
+      400,
+      1120,
+      1839,
+      2560,
+      3280,
+      4000
+    ],
+    "train_mae": [
+      0.17454925000000066,
+      0.15577232142857217,
+      0.12791195292472646,
+      0.11520082189360117,
+      0.10817345891405335,
+      0.10138137627976167
+    ],
+    "valid_mae": [
+      0.5289455999999999,
+      0.4256255000000001,
+      0.3417782371428572,
+      0.31774732619047624,
+      0.29621421904761924,
+      0.2754199500000002
+    ]
+  },
+  "error_analysis": {
+    "residual_mean": -0.005678033333333481,
+    "share_within_0_5": 0.831,
+    "share_within_1_0": 0.98,
+    "mae_by_slice": {
+      "Stress_Level": {
+        "High": {
+          "mae": 0.2546793114543111,
+          "n": 259
+        },
+        "Low": {
+          "mae": 0.25922506313131494,
+          "n": 132
+        },
+        "Medium": {
+          "mae": 0.2786902723735412,
+          "n": 257
+        },
+        "Very High": {
+          "mae": 0.29628953598484853,
+          "n": 352
+        }
+      },
+      "Academic_Level": {
+        "Graduate": {
+          "mae": 0.3165176413255366,
+          "n": 171
+        },
+        "High School": {
+          "mae": 0.2852011494252884,
+          "n": 87
+        },
+        "Undergraduate": {
+          "mae": 0.26571421832884107,
+          "n": 742
+        }
+      },
+      "Gender": {
+        "Female": {
+          "mae": 0.2528447687224672,
+          "n": 454
+        },
+        "Male": {
+          "mae": 0.2954312118437121,
+          "n": 546
+        }
+      },
+      "Purpose_Of_Use": {
+        "Education": {
+          "mae": 0.31322190799396754,
+          "n": 221
+        },
+        "Entertainment": {
+          "mae": 0.2618331535947715,
+          "n": 510
+        },
+        "Networking": {
+          "mae": 0.25691181434599114,
+          "n": 158
+        },
+        "News": {
+          "mae": 0.2950265765765767,
+          "n": 111
+        }
+      }
+    },
+    "mean_residual_by_actual_band": {
+      "(3, 5]": {
+        "mean_residual": -0.28587398373983813,
+        "n": 246
+      },
+      "(5, 6]": {
+        "mean_residual": 0.08981929824561341,
+        "n": 266
+      },
+      "(6, 7]": {
+        "mean_residual": 0.017232912844037017,
+        "n": 218
+      },
+      "(7, 8]": {
+        "mean_residual": 0.012165000000000143,
+        "n": 170
+      },
+      "(8, 10]": {
+        "mean_residual": 0.34930208333333446,
+        "n": 100
+      }
+    }
+  },
+  "behavioural_tests": {
+    "invariance_gender": {
+      "mean_abs_change": 0.07344286666666668,
+      "share_change_over_0_5": 0.001,
+      "max_abs_change": 0.5090000000000021
+    },
+    "directional_usage_2h_to_7h": {
+      "share_score_decreases": 1.0,
+      "mean_change": -1.506867245238097
+    },
+    "directional_sleep_5h_to_8h": {
+      "share_score_increases": 0.964,
+      "mean_change": 0.83473435
+    },
+    "perturbation_noise_0_25h": {
+      "mean_abs_change": 0.11487964166666668
+    },
+    "local_non_monotonicity_usage": {
+      "max_step_increase": 0.23050000000000193,
+      "mean_max_step_increase": 0.04869999999999989
+    },
+    "no_extrapolation_8_8h_vs_20h": {
+      "max_abs_difference": 1.7763568394002505e-15
+    }
+  },
+  "eda": {
+    "usage_bin_mean_score": {
+      "(0, 2]": {
+        "mean": 7.993464052287582,
+        "n": 153
+      },
+      "(2, 3]": {
+        "mean": 7.977149321266968,
+        "n": 442
+      },
+      "(3, 4]": {
+        "mean": 7.411383928571429,
+        "n": 896
+      },
+      "(4, 5]": {
+        "mean": 6.490792079207921,
+        "n": 1010
+      },
+      "(5, 6]": {
+        "mean": 5.746115537848606,
+        "n": 1004
+      },
+      "(6, 7]": {
+        "mean": 4.976119402985075,
+        "n": 804
+      },
+      "(7, 9]": {
+        "mean": 4.978002894356006,
+        "n": 691
+      }
+    },
+    "sleep_ge_7_mean": 7.314468085106383,
+    "sleep_lt_7_mean": 5.436672443674176,
+    "stress_mean_score": {
+      "High": 6.025,
+      "Low": 7.84,
+      "Medium": 7.136,
+      "Very High": 5.051
+    },
+    "stress_mean_usage": {
+      "High": 5.188,
+      "Low": 2.776,
+      "Medium": 3.862,
+      "Very High": 6.867
+    },
+    "platform_mean_score": {
+      "Facebook": 6.398,
+      "Instagram": 6.194,
+      "KakaoTalk": 5.983,
+      "LINE": 8.024,
+      "LinkedIn": 6.483,
+      "Snapchat": 6.123,
+      "TikTok": 5.993,
+      "Twitter": 6.347,
+      "VKontakte": 7.002,
+      "WeChat": 6.494,
+      "WhatsApp": 5.578,
+      "YouTube": 6.216
+    },
+    "platform_single_country": {
+      "LINE": {
+        "top_country": "Japan",
+        "share": 1.0
+      },
+      "KakaoTalk": {
+        "top_country": "South Korea",
+        "share": 1.0
+      },
+      "WeChat": {
+        "top_country": "China",
+        "share": 1.0
+      },
+      "VKontakte": {
+        "top_country": "Russia",
+        "share": 1.0
+      }
+    },
+    "vietnam_rows": 5,
+    "n_countries": 111,
+    "countries_under_30_rows": 85
+  },
+  "tuning": {
+    "search_space": "n_estimators, min_samples_leaf, max_features, max_depth",
+    "iterations": 12,
+    "best_params": {
+      "n_estimators": 200,
+      "min_samples_leaf": 1,
+      "max_features": 0.5,
+      "max_depth": null
+    },
+    "best_cv_r2_on_train": 0.8914897403542508,
+    "holdout": {
+      "mae": 0.27609696666666694,
+      "rmse": 0.3762410043490891,
+      "r2": 0.9183696119836651
+    }
+  },
+  "figures": [
+    "usage_threshold.png",
+    "learning_curve.png",
+    "what_if_usage.png"
+  ]
+}

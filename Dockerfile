@@ -8,10 +8,11 @@ COPY requirements-api.txt .
 RUN pip install --no-cache-dir -r requirements-api.txt
 
 COPY app ./app
-COPY artifacts ./artifacts
+COPY config ./config
+COPY models ./models
 
 RUN useradd --create-home --uid 1001 appuser \
-    && chown -R appuser:appuser /app
+    && mkdir -p /app/logs && chown -R appuser:appuser /app
 USER appuser
 
 EXPOSE 8000

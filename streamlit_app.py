@@ -105,6 +105,33 @@ def score_label(score: float) -> str:
     return "trung bình"
 
 
+def show_what_if(payload: dict) -> None:
+    """Vary one habit, keep the rest, and plot the model's response (/predict/batch)."""
+    st.subheader("Nếu thay đổi thói quen thì sao? (what-if)")
+    st.caption(
+        "Giữ nguyên các thông tin khác, chỉ thay đổi một yếu tố. Đây là phản ứng "
+        "của mô hình, không phải quan hệ nhân quả."
+    )
+    tab_usage, tab_sleep = st.tabs(["Giờ dùng mạng xã hội", "Giờ ngủ"])
+    for tab, field, label, grid in [
+        (tab_usage, "avg_daily_usage_hours", "Giờ dùng/ngày", [x / 2 for x in range(2, 18)]),
+        (tab_sleep, "sleep_hours_per_night", "Giờ ngủ/đêm", [x / 2 for x in range(8, 20)]),
+    ]:
+        with tab:
+            items = [{**payload, field: value} for value in grid]
+            try:
+                batch = requests.post(
+                    f"{api_url}/predict/batch", json={"items": items}, timeout=15
+                )
+                batch.raise_for_status()
+            except requests.RequestException as exc:
+                st.error(f"Không lấy được dữ liệu what-if: {exc}")
+                continue
+            scores = [p["mental_health_score"] for p in batch.json()["predictions"]]
+            chart = pd.DataFrame({label: grid, "Điểm dự đoán": scores}).set_index(label)
+            st.line_chart(chart)
+
+
 model_info = fetch_model_info(api_url)
 
 with st.sidebar:
@@ -162,9 +189,20 @@ with st.form("prediction_form"):
             index=["Female", "Male"].index(preset["gender"]),
             key=f"gender_{suffix}",
         )
-        country = st.text_input(
-            "Quốc gia", value=preset["country"], key=f"country_{suffix}"
-        )
+        known_countries = (model_info or {}).get("categories", {}).get("Country", [])
+        if known_countries:
+            country = st.selectbox(
+                "Quốc gia (giá trị có trong dữ liệu huấn luyện)",
+                known_countries,
+                index=known_countries.index(preset["country"])
+                if preset["country"] in known_countries
+                else 0,
+                key=f"country_{suffix}",
+            )
+        else:
+            country = st.text_input(
+                "Quốc gia", value=preset["country"], key=f"country_{suffix}"
+            )
         academic_level = st.selectbox(
             "Bậc học",
             ACADEMIC_LEVELS,
@@ -276,10 +314,13 @@ if submitted:
                     "Ngưỡng thấp/trung bình/cao dựa trên phân vị 25/75 của điểm "
                     "trong dữ liệu huấn luyện."
                 )
+                for message in result.get("warnings", []):
+                    st.warning(message)
                 st.info(
                     "Đây là dự đoán từ dữ liệu khảo sát và mô hình học máy, "
                     "không thể dùng để kết luận tình trạng sức khỏe của một cá nhân."
                 )
+                show_what_if(payload)
 
 st.divider()
 st.caption(f"API: {api_url} · Dùng `/docs` để thử REST API trực tiếp.")

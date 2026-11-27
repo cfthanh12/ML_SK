@@ -71,6 +71,23 @@ class PredictionResponse(BaseModel):
     mental_health_score: float = Field(description="Estimated score on the dataset's 0-10 scale.")
     score_scale: str = "0-10"
     model_version: str
+    warnings: list[str] = Field(
+        default_factory=list,
+        description="Cảnh báo khi đầu vào nằm ngoài vùng dữ liệu huấn luyện.",
+    )
+
+
+class BatchPredictionRequest(BaseModel):
+    """Several profiles in one request (batch prediction, used by the what-if chart)."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    items: list[PredictionRequest] = Field(min_length=1, max_length=200)
+
+
+class BatchPredictionResponse(BaseModel):
+    predictions: list[PredictionResponse]
+    count: int
 
 
 class FeatureImportanceItem(BaseModel):
@@ -104,3 +121,5 @@ class ModelInfoResponse(BaseModel):
     feature_importance_method: str
     training_rows: int
     trained_at_utc: str
+    numeric_ranges: dict[str, list[float]] = Field(default_factory=dict)
+    categories: dict[str, list[str]] = Field(default_factory=dict)

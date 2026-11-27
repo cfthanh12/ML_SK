@@ -1,0 +1,6 @@
+{
+  "name": "report-builder",
+  "private": true,
+  "type": "module",
+  "dependencies": { "docx": "^9.15.4" }
+}

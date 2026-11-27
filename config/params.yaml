@@ -1,0 +1,38 @@
+# Tham số trung tâm của dự án (mục "Config" trong template môn học).
+# Sửa ở đây rồi chạy lại: python -m app.train  và  python -m app.evaluate
+split:
+  test_size: 0.2
+  random_state: 42
+
+cv_folds: 5
+
+# Random Forest: siêu tham số chọn bằng RandomizedSearchCV (3-fold CV chỉ trên
+# tập train) trong app/evaluate.py; xem reports/experiments.json -> tuning.
+random_forest:
+  n_estimators: 200
+  max_features: 0.5
+  min_samples_leaf: 1
+  max_depth: null
+  n_jobs: -1
+
+# Cấu hình Random Forest của bản 1.1.0, giữ lại để so sánh trong báo cáo.
+random_forest_initial:
+  n_estimators: 300
+  min_samples_leaf: 2
+  n_jobs: -1
+
+hist_gradient_boosting:
+  max_iter: 300
+  learning_rate: 0.1
+
+evaluation:
+  permutation_repeats: 10
+  tuning_iterations: 12
+  # Phép đo thỏa mãn cho API (ML Yearning ch.9): trung vị độ trễ /predict.
+  max_latency_ms: 100
+
+api:
+  # Quốc gia có ít dòng hơn ngưỡng này trong dữ liệu huấn luyện sẽ bị cảnh báo.
+  rare_country_threshold: 30
+  max_batch_size: 200
+  log_file: logs/app.log

@@ -1,0 +1,730 @@
+{
+  "generated_at_utc": "2026-11-22T11:31:50.276462+00:00",
+  "model_version": "1.2.0",
+  "selected_model": "random_forest",
+  "trained_at_utc": "2026-11-21T09:17:50.574972+00:00",
+  "training_rows": 5000,
+  "dataset": {
+    "rows": 5000,
+    "columns": 13,
+    "feature_count": 12,
+    "target": {
+      "column": "Mental_Health_Score",
+      "min": 3.6,
+      "max": 9.4,
+      "mean": 6.23098,
+      "p25": 5.1,
+      "p75": 7.1
+    }
+  },
+  "quality": {
+    "duplicate_rows": 2,
+    "negative_physical_activity": 10,
+    "country_count": 111,
+    "country_other_rows": 1880
+  },
+  "describe": [
+    {
+      "column": "Age",
+      "mean": 20.8218,
+      "std": 1.73662,
+      "min": 18,
+      "p25": 19.0,
+      "p50": 21.0,
+      "p75": 22.0,
+      "max": 24
+    },
+    {
+      "column": "Avg_Daily_Usage_Hours",
+      "mean": 5.07846,
+      "std": 1.653913,
+      "min": 1.0,
+      "p25": 3.8,
+      "p50": 5.0,
+      "p75": 6.3,
+      "max": 8.8
+    },
+    {
+      "column": "Daily_Unlocks",
+      "mean": 171.4526,
+      "std": 42.858254,
+      "min": 62,
+      "p25": 140.0,
+      "p50": 171.0,
+      "p75": 204.0,
+      "max": 273
+    },
+    {
+      "column": "Study_Hours",
+      "mean": 3.00842,
+      "std": 1.637018,
+      "min": 0.3,
+      "p25": 1.5,
+      "p50": 2.8,
+      "p75": 4.2,
+      "max": 8.3
+    },
+    {
+      "column": "Physical_Activity_Hours",
+      "mean": 1.751,
+      "std": 0.668398,
+      "min": -0.4,
+      "p25": 1.3,
+      "p50": 1.7,
+      "p75": 2.2,
+      "max": 4.1
+    },
+    {
+      "column": "Sleep_Hours_Per_Night",
+      "mean": 6.63458,
+      "std": 1.221391,
+      "min": 3.6,
+      "p25": 5.6,
+      "p50": 6.6,
+      "p75": 7.5,
+      "max": 9.9
+    },
+    {
+      "column": "Mental_Health_Score",
+      "mean": 6.23098,
+      "std": 1.278701,
+      "min": 3.6,
+      "p25": 5.1,
+      "p50": 6.1,
+      "p75": 7.1,
+      "max": 9.4
+    }
+  ],
+  "correlations": [
+    {
+      "feature": "Avg_Daily_Usage_Hours",
+      "value": -0.816453
+    },
+    {
+      "feature": "Daily_Unlocks",
+      "value": -0.790851
+    },
+    {
+      "feature": "Sleep_Hours_Per_Night",
+      "value": 0.76643
+    },
+    {
+      "feature": "Study_Hours",
+      "value": 0.752626
+    },
+    {
+      "feature": "Physical_Activity_Hours",
+      "value": 0.521605
+    },
+    {
+      "feature": "Age",
+      "value": 0.100785
+    }
+  ],
+  "stress_groups": [
+    {
+      "level": "Low",
+      "mean": 7.840217,
+      "count": 644
+    },
+    {
+      "level": "Medium",
+      "mean": 7.135907,
+      "count": 1295
+    },
+    {
+      "level": "High",
+      "mean": 6.025417,
+      "count": 1440
+    },
+    {
+      "level": "Very High",
+      "mean": 5.051326,
+      "count": 1621
+    }
+  ],
+  "platform_groups": [
+    {
+      "platform": "Instagram",
+      "mean": 6.194071,
+      "count": 1130
+    },
+    {
+      "platform": "TikTok",
+      "mean": 5.993355,
+      "count": 918
+    },
+    {
+      "platform": "Facebook",
+      "mean": 6.398331,
+      "count": 719
+    },
+    {
+      "platform": "LinkedIn",
+      "mean": 6.4826,
+      "count": 523
+    },
+    {
+      "platform": "YouTube",
+      "mean": 6.216497,
+      "count": 491
+    },
+    {
+      "platform": "Twitter",
+      "mean": 6.346753,
+      "count": 462
+    },
+    {
+      "platform": "Snapchat",
+      "mean": 6.123095,
+      "count": 420
+    },
+    {
+      "platform": "WhatsApp",
+      "mean": 5.578286,
+      "count": 175
+    },
+    {
+      "platform": "LINE",
+      "mean": 8.024,
+      "count": 50
+    },
+    {
+      "platform": "VKontakte",
+      "mean": 7.0025,
+      "count": 40
+    },
+    {
+      "platform": "KakaoTalk",
+      "mean": 5.983333,
+      "count": 36
+    },
+    {
+      "platform": "WeChat",
+      "mean": 6.494444,
+      "count": 36
+    }
+  ],
+  "metrics": {
+    "mae": 0.276097,
+    "rmse": 0.376241,
+    "r2": 0.91837
+  },
+  "cv_results": [
+    {
+      "model": "random_forest",
+      "mae_mean": 0.292341,
+      "mae_std": 0.010462,
+      "rmse_mean": 0.393234,
+      "rmse_std": 0.013365,
+      "r2_mean": 0.903578,
+      "r2_std": 0.007672
+    },
+    {
+      "model": "hist_gradient_boosting",
+      "mae_mean": 0.31622,
+      "mae_std": 0.009299,
+      "rmse_mean": 0.422266,
+      "rmse_std": 0.012099,
+      "r2_mean": 0.888848,
+      "r2_std": 0.007894
+    },
+    {
+      "model": "linear_regression",
+      "mae_mean": 0.473043,
+      "mae_std": 0.011126,
+      "rmse_mean": 0.603468,
+      "rmse_std": 0.012742,
+      "r2_mean": 0.773224,
+      "r2_std": 0.010436
+    },
+    {
+      "model": "baseline_dummy",
+      "mae_mean": 1.055627,
+      "mae_std": 0.019862,
+      "rmse_mean": 1.268963,
+      "rmse_std": 0.024805,
+      "r2_mean": -0.001732,
+      "r2_std": 0.001093
+    }
+  ],
+  "feature_importance": [
+    {
+      "feature": "Avg_Daily_Usage_Hours",
+      "importance": 0.54867
+    },
+    {
+      "feature": "Sleep_Hours_Per_Night",
+      "importance": 0.373623
+    },
+    {
+      "feature": "Country",
+      "importance": 0.209281
+    },
+    {
+      "feature": "Daily_Unlocks",
+      "importance": 0.159764
+    },
+    {
+      "feature": "Most_Used_Platform",
+      "importance": 0.054091
+    },
+    {
+      "feature": "Study_Hours",
+      "importance": 0.047764
+    },
+    {
+      "feature": "Age",
+      "importance": 0.038081
+    },
+    {
+      "feature": "Physical_Activity_Hours",
+      "importance": 0.028689
+    },
+    {
+      "feature": "Purpose_Of_Use",
+      "importance": 0.026375
+    },
+    {
+      "feature": "Stress_Level",
+      "importance": 0.024286
+    },
+    {
+      "feature": "Gender",
+      "importance": 0.023046
+    },
+    {
+      "feature": "Academic_Level",
+      "importance": 0.018736
+    }
+  ],
+  "stress_ablation": {
+    "dropped_feature": "Stress_Level",
+    "selected_model": "random_forest",
+    "metrics": {
+      "mae": 0.274062,
+      "rmse": 0.37622,
+      "r2": 0.918379
+    },
+    "cv_results": [
+      {
+        "model": "random_forest",
+        "mae_mean": 0.293904,
+        "mae_std": 0.010298,
+        "rmse_mean": 0.394159,
+        "rmse_std": 0.014185,
+        "r2_mean": 0.903133,
+        "r2_std": 0.007758
+      },
+      {
+        "model": "hist_gradient_boosting",
+        "mae_mean": 0.317205,
+        "mae_std": 0.007765,
+        "rmse_mean": 0.421808,
+        "rmse_std": 0.009469,
+        "r2_mean": 0.889206,
+        "r2_std": 0.005271
+      },
+      {
+        "model": "linear_regression",
+        "mae_mean": 0.475342,
+        "mae_std": 0.015217,
+        "rmse_mean": 0.609292,
+        "rmse_std": 0.015801,
+        "r2_mean": 0.768791,
+        "r2_std": 0.012319
+      },
+      {
+        "model": "baseline_dummy",
+        "mae_mean": 1.055627,
+        "mae_std": 0.019862,
+        "rmse_mean": 1.268963,
+        "rmse_std": 0.024805,
+        "r2_mean": -0.001732,
+        "r2_std": 0.001093
+      }
+    ]
+  },
+  "cleaning_report": {
+    "negative_physical_activity_values_clipped": 10,
+    "duplicate_rows_kept": 2
+  },
+  "thresholds": {
+    "low": 5.1,
+    "high": 7.1
+  },
+  "residual_mean": -0.005678,
+  "residual_std": 0.376386,
+  "predictions": {
+    "example": {
+      "payload": {
+        "age": 21,
+        "gender": "Female",
+        "country": "Vietnam",
+        "academic_level": "Undergraduate",
+        "most_used_platform": "Instagram",
+        "purpose_of_use": "Education",
+        "avg_daily_usage_hours": 4.0,
+        "daily_unlocks": 120,
+        "study_hours": 4.0,
+        "physical_activity_hours": 1.0,
+        "sleep_hours_per_night": 7.0,
+        "stress_level": "Medium"
+      },
+      "score": 6.99,
+      "warnings": [
+        "Country='Vietnam' chỉ có 5 dòng trong dữ liệu huấn luyện; độ tin cậy thấp."
+      ]
+    },
+    "presets": [
+      {
+        "name": "Cân bằng",
+        "score": 8.03
+      },
+      {
+        "name": "Dùng nhiều mạng xã hội",
+        "score": 4.98
+      },
+      {
+        "name": "Học tập cao",
+        "score": 8.33
+      }
+    ]
+  },
+  "figures": {
+    "architecture": "01_architecture.png",
+    "target_hist": "02_target_hist.png",
+    "stress_counts": "03_stress_counts.png",
+    "correlation": "04_correlation.png",
+    "scatter_numeric": "05_scatter_numeric.png",
+    "cv_rmse": "06_cv_rmse.png",
+    "actual_vs_predicted": "07_actual_vs_predicted.png",
+    "residuals": "08_residuals.png",
+    "importance": "09_importance.png",
+    "usage_threshold": "10_usage_threshold.png",
+    "learning_curve": "11_learning_curve.png",
+    "what_if": "12_what_if_usage.png"
+  },
+  "extended": {
+    "n_rows": 5000,
+    "split": {
+      "train": 4000,
+      "test": 1000
+    },
+    "cleaning": {
+      "negative_physical_activity_values_clipped": 10,
+      "duplicate_rows_kept": 2
+    },
+    "holdout_comparison": [
+      {
+        "model": "Baseline (trung bình)",
+        "holdout_mae": 1.113057,
+        "holdout_rmse": 1.316884,
+        "holdout_r2": -3.4e-05,
+        "holdout_adjusted_r2": -0.154953,
+        "train_r2": 0.0,
+        "n_predictors_after_encoding": 134,
+        "fit_seconds": 0.026925,
+        "predict_ms_per_row": 0.01022
+      },
+      {
+        "model": "Linear Regression",
+        "holdout_mae": 0.469178,
+        "holdout_rmse": 0.59859,
+        "holdout_r2": 0.793377,
+        "holdout_adjusted_r2": 0.761368,
+        "train_r2": 0.782011,
+        "n_predictors_after_encoding": 134,
+        "fit_seconds": 0.053386,
+        "predict_ms_per_row": 0.012411
+      },
+      {
+        "model": "HistGradientBoosting",
+        "holdout_mae": 0.301753,
+        "holdout_rmse": 0.397576,
+        "holdout_r2": 0.908849,
+        "holdout_adjusted_r2": 0.894729,
+        "train_r2": 0.971695,
+        "n_predictors_after_encoding": 134,
+        "fit_seconds": 1.428711,
+        "predict_ms_per_row": 0.01913
+      },
+      {
+        "model": "Random Forest ban đầu (v1.1.0)",
+        "holdout_mae": 0.285447,
+        "holdout_rmse": 0.39477,
+        "holdout_r2": 0.910131,
+        "holdout_adjusted_r2": 0.896209,
+        "train_r2": 0.977492,
+        "n_predictors_after_encoding": 134,
+        "fit_seconds": 3.608631,
+        "predict_ms_per_row": 0.083348
+      },
+      {
+        "model": "Random Forest đã tinh chỉnh (v1.2.0)",
+        "holdout_mae": 0.276097,
+        "holdout_rmse": 0.376241,
+        "holdout_r2": 0.91837,
+        "holdout_adjusted_r2": 0.905724,
+        "train_r2": 0.988222,
+        "n_predictors_after_encoding": 134,
+        "fit_seconds": 1.764075,
+        "predict_ms_per_row": 0.064508
+      },
+      {
+        "model": "Random Forest bỏ Country",
+        "holdout_mae": 0.336528,
+        "holdout_rmse": 0.447445,
+        "holdout_r2": 0.884549,
+        "holdout_adjusted_r2": 0.880852,
+        "train_r2": 0.982888,
+        "n_predictors_after_encoding": 31,
+        "fit_seconds": 1.166561,
+        "predict_ms_per_row": 0.071564
+      }
+    ],
+    "learning_curve": {
+      "train_sizes": [
+        400,
+        1120,
+        1839,
+        2560,
+        3280,
+        4000
+      ],
+      "train_mae": [
+        0.174549,
+        0.155772,
+        0.127912,
+        0.115201,
+        0.108173,
+        0.101381
+      ],
+      "valid_mae": [
+        0.528946,
+        0.425626,
+        0.341778,
+        0.317747,
+        0.296214,
+        0.27542
+      ]
+    },
+    "error_analysis": {
+      "residual_mean": -0.005678,
+      "share_within_0_5": 0.831,
+      "share_within_1_0": 0.98,
+      "mae_by_slice": {
+        "Stress_Level": {
+          "High": {
+            "mae": 0.254679,
+            "n": 259
+          },
+          "Low": {
+            "mae": 0.259225,
+            "n": 132
+          },
+          "Medium": {
+            "mae": 0.27869,
+            "n": 257
+          },
+          "Very High": {
+            "mae": 0.29629,
+            "n": 352
+          }
+        },
+        "Academic_Level": {
+          "Graduate": {
+            "mae": 0.316518,
+            "n": 171
+          },
+          "High School": {
+            "mae": 0.285201,
+            "n": 87
+          },
+          "Undergraduate": {
+            "mae": 0.265714,
+            "n": 742
+          }
+        },
+        "Gender": {
+          "Female": {
+            "mae": 0.252845,
+            "n": 454
+          },
+          "Male": {
+            "mae": 0.295431,
+            "n": 546
+          }
+        },
+        "Purpose_Of_Use": {
+          "Education": {
+            "mae": 0.313222,
+            "n": 221
+          },
+          "Entertainment": {
+            "mae": 0.261833,
+            "n": 510
+          },
+          "Networking": {
+            "mae": 0.256912,
+            "n": 158
+          },
+          "News": {
+            "mae": 0.295027,
+            "n": 111
+          }
+        }
+      },
+      "mean_residual_by_actual_band": {
+        "(3, 5]": {
+          "mean_residual": -0.285874,
+          "n": 246
+        },
+        "(5, 6]": {
+          "mean_residual": 0.089819,
+          "n": 266
+        },
+        "(6, 7]": {
+          "mean_residual": 0.017233,
+          "n": 218
+        },
+        "(7, 8]": {
+          "mean_residual": 0.012165,
+          "n": 170
+        },
+        "(8, 10]": {
+          "mean_residual": 0.349302,
+          "n": 100
+        }
+      }
+    },
+    "behavioural_tests": {
+      "invariance_gender": {
+        "mean_abs_change": 0.073443,
+        "share_change_over_0_5": 0.001,
+        "max_abs_change": 0.509
+      },
+      "directional_usage_2h_to_7h": {
+        "share_score_decreases": 1.0,
+        "mean_change": -1.506867
+      },
+      "directional_sleep_5h_to_8h": {
+        "share_score_increases": 0.964,
+        "mean_change": 0.834734
+      },
+      "perturbation_noise_0_25h": {
+        "mean_abs_change": 0.11488
+      },
+      "local_non_monotonicity_usage": {
+        "max_step_increase": 0.2305,
+        "mean_max_step_increase": 0.0487
+      },
+      "no_extrapolation_8_8h_vs_20h": {
+        "max_abs_difference": 0.0
+      }
+    },
+    "eda": {
+      "usage_bin_mean_score": {
+        "(0, 2]": {
+          "mean": 7.993464,
+          "n": 153
+        },
+        "(2, 3]": {
+          "mean": 7.977149,
+          "n": 442
+        },
+        "(3, 4]": {
+          "mean": 7.411384,
+          "n": 896
+        },
+        "(4, 5]": {
+          "mean": 6.490792,
+          "n": 1010
+        },
+        "(5, 6]": {
+          "mean": 5.746116,
+          "n": 1004
+        },
+        "(6, 7]": {
+          "mean": 4.976119,
+          "n": 804
+        },
+        "(7, 9]": {
+          "mean": 4.978003,
+          "n": 691
+        }
+      },
+      "sleep_ge_7_mean": 7.314468,
+      "sleep_lt_7_mean": 5.436672,
+      "stress_mean_score": {
+        "High": 6.025,
+        "Low": 7.84,
+        "Medium": 7.136,
+        "Very High": 5.051
+      },
+      "stress_mean_usage": {
+        "High": 5.188,
+        "Low": 2.776,
+        "Medium": 3.862,
+        "Very High": 6.867
+      },
+      "platform_mean_score": {
+        "Facebook": 6.398,
+        "Instagram": 6.194,
+        "KakaoTalk": 5.983,
+        "LINE": 8.024,
+        "LinkedIn": 6.483,
+        "Snapchat": 6.123,
+        "TikTok": 5.993,
+        "Twitter": 6.347,
+        "VKontakte": 7.002,
+        "WeChat": 6.494,
+        "WhatsApp": 5.578,
+        "YouTube": 6.216
+      },
+      "platform_single_country": {
+        "LINE": {
+          "top_country": "Japan",
+          "share": 1.0
+        },
+        "KakaoTalk": {
+          "top_country": "South Korea",
+          "share": 1.0
+        },
+        "WeChat": {
+          "top_country": "China",
+          "share": 1.0
+        },
+        "VKontakte": {
+          "top_country": "Russia",
+          "share": 1.0
+        }
+      },
+      "vietnam_rows": 5,
+      "n_countries": 111,
+      "countries_under_30_rows": 85
+    },
+    "tuning": {
+      "search_space": "n_estimators, min_samples_leaf, max_features, max_depth",
+      "iterations": 12,
+      "best_params": {
+        "n_estimators": 200,
+        "min_samples_leaf": 1,
+        "max_features": 0.5,
+        "max_depth": null
+      },
+      "best_cv_r2_on_train": 0.89149,
+      "holdout": {
+        "mae": 0.276097,
+        "rmse": 0.376241,
+        "r2": 0.91837
+      }
+    },
+    "figures": [
+      "usage_threshold.png",
+      "learning_curve.png",
+      "what_if_usage.png"
+    ]
+  },
+  "test_count": 86
+}

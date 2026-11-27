@@ -1,0 +1,457 @@
+{
+  "model_version": "1.2.0",
+  "target_column": "Mental_Health_Score",
+  "selected_model": "random_forest",
+  "feature_columns": [
+    "Age",
+    "Gender",
+    "Country",
+    "Academic_Level",
+    "Most_Used_Platform",
+    "Purpose_Of_Use",
+    "Avg_Daily_Usage_Hours",
+    "Daily_Unlocks",
+    "Study_Hours",
+    "Physical_Activity_Hours",
+    "Sleep_Hours_Per_Night",
+    "Stress_Level"
+  ],
+  "metrics": {
+    "mae": 0.276097,
+    "rmse": 0.376241,
+    "r2": 0.91837
+  },
+  "cv_results": [
+    {
+      "model": "random_forest",
+      "mae_mean": 0.292341,
+      "mae_std": 0.010462,
+      "rmse_mean": 0.393234,
+      "rmse_std": 0.013365,
+      "r2_mean": 0.903578,
+      "r2_std": 0.007672
+    },
+    {
+      "model": "hist_gradient_boosting",
+      "mae_mean": 0.31622,
+      "mae_std": 0.009299,
+      "rmse_mean": 0.422266,
+      "rmse_std": 0.012099,
+      "r2_mean": 0.888848,
+      "r2_std": 0.007894
+    },
+    {
+      "model": "linear_regression",
+      "mae_mean": 0.473043,
+      "mae_std": 0.011126,
+      "rmse_mean": 0.603468,
+      "rmse_std": 0.012742,
+      "r2_mean": 0.773224,
+      "r2_std": 0.010436
+    },
+    {
+      "model": "baseline_dummy",
+      "mae_mean": 1.055627,
+      "mae_std": 0.019862,
+      "rmse_mean": 1.268963,
+      "rmse_std": 0.024805,
+      "r2_mean": -0.001732,
+      "r2_std": 0.001093
+    }
+  ],
+  "feature_importance": [
+    {
+      "feature": "Avg_Daily_Usage_Hours",
+      "importance": 0.54867
+    },
+    {
+      "feature": "Sleep_Hours_Per_Night",
+      "importance": 0.373623
+    },
+    {
+      "feature": "Country",
+      "importance": 0.209281
+    },
+    {
+      "feature": "Daily_Unlocks",
+      "importance": 0.159764
+    },
+    {
+      "feature": "Most_Used_Platform",
+      "importance": 0.054091
+    },
+    {
+      "feature": "Study_Hours",
+      "importance": 0.047764
+    },
+    {
+      "feature": "Age",
+      "importance": 0.038081
+    },
+    {
+      "feature": "Physical_Activity_Hours",
+      "importance": 0.028689
+    },
+    {
+      "feature": "Purpose_Of_Use",
+      "importance": 0.026375
+    },
+    {
+      "feature": "Stress_Level",
+      "importance": 0.024286
+    },
+    {
+      "feature": "Gender",
+      "importance": 0.023046
+    },
+    {
+      "feature": "Academic_Level",
+      "importance": 0.018736
+    }
+  ],
+  "feature_importance_method": "permutation",
+  "stress_ablation": {
+    "dropped_feature": "Stress_Level",
+    "selected_model": "random_forest",
+    "metrics": {
+      "mae": 0.274062,
+      "rmse": 0.37622,
+      "r2": 0.918379
+    },
+    "cv_results": [
+      {
+        "model": "random_forest",
+        "mae_mean": 0.293904,
+        "mae_std": 0.010298,
+        "rmse_mean": 0.394159,
+        "rmse_std": 0.014185,
+        "r2_mean": 0.903133,
+        "r2_std": 0.007758
+      },
+      {
+        "model": "hist_gradient_boosting",
+        "mae_mean": 0.317205,
+        "mae_std": 0.007765,
+        "rmse_mean": 0.421808,
+        "rmse_std": 0.009469,
+        "r2_mean": 0.889206,
+        "r2_std": 0.005271
+      },
+      {
+        "model": "linear_regression",
+        "mae_mean": 0.475342,
+        "mae_std": 0.015217,
+        "rmse_mean": 0.609292,
+        "rmse_std": 0.015801,
+        "r2_mean": 0.768791,
+        "r2_std": 0.012319
+      },
+      {
+        "model": "baseline_dummy",
+        "mae_mean": 1.055627,
+        "mae_std": 0.019862,
+        "rmse_mean": 1.268963,
+        "rmse_std": 0.024805,
+        "r2_mean": -0.001732,
+        "r2_std": 0.001093
+      }
+    ]
+  },
+  "training_rows": 5000,
+  "cleaning_report": {
+    "negative_physical_activity_values_clipped": 10,
+    "duplicate_rows_kept": 2
+  },
+  "training_profile": {
+    "numeric_ranges": {
+      "Age": [
+        18.0,
+        24.0
+      ],
+      "Avg_Daily_Usage_Hours": [
+        1.0,
+        8.8
+      ],
+      "Daily_Unlocks": [
+        62.0,
+        273.0
+      ],
+      "Study_Hours": [
+        0.3,
+        8.3
+      ],
+      "Physical_Activity_Hours": [
+        0.0,
+        4.1
+      ],
+      "Sleep_Hours_Per_Night": [
+        3.6,
+        9.9
+      ]
+    },
+    "categories": {
+      "Gender": [
+        "Female",
+        "Male"
+      ],
+      "Country": [
+        "Afghanistan",
+        "Albania",
+        "Andorra",
+        "Argentina",
+        "Armenia",
+        "Australia",
+        "Austria",
+        "Azerbaijan",
+        "Bahamas",
+        "Bahrain",
+        "Bangladesh",
+        "Belarus",
+        "Belgium",
+        "Bhutan",
+        "Bolivia",
+        "Bosnia",
+        "Brazil",
+        "Bulgaria",
+        "Canada",
+        "Chile",
+        "China",
+        "Colombia",
+        "Costa Rica",
+        "Croatia",
+        "Cyprus",
+        "Czech Republic",
+        "Denmark",
+        "Ecuador",
+        "Egypt",
+        "Estonia",
+        "Finland",
+        "France",
+        "Georgia",
+        "Germany",
+        "Ghana",
+        "Greece",
+        "Hong Kong",
+        "Hungary",
+        "Iceland",
+        "India",
+        "Indonesia",
+        "Iraq",
+        "Ireland",
+        "Israel",
+        "Italy",
+        "Jamaica",
+        "Japan",
+        "Jordan",
+        "Kazakhstan",
+        "Kenya",
+        "Kosovo",
+        "Kuwait",
+        "Kyrgyzstan",
+        "Latvia",
+        "Lebanon",
+        "Liechtenstein",
+        "Lithuania",
+        "Luxembourg",
+        "Malaysia",
+        "Maldives",
+        "Malta",
+        "Mexico",
+        "Moldova",
+        "Monaco",
+        "Montenegro",
+        "Morocco",
+        "Nepal",
+        "Netherlands",
+        "New Zealand",
+        "Nigeria",
+        "North Macedonia",
+        "Norway",
+        "Oman",
+        "Other",
+        "Pakistan",
+        "Panama",
+        "Paraguay",
+        "Peru",
+        "Philippines",
+        "Poland",
+        "Portugal",
+        "Qatar",
+        "Romania",
+        "Russia",
+        "San Marino",
+        "Serbia",
+        "Singapore",
+        "Slovakia",
+        "Slovenia",
+        "South Africa",
+        "South Korea",
+        "Spain",
+        "Sri Lanka",
+        "Sweden",
+        "Switzerland",
+        "Syria",
+        "Taiwan",
+        "Tajikistan",
+        "Thailand",
+        "Trinidad",
+        "Turkey",
+        "UAE",
+        "UK",
+        "USA",
+        "Ukraine",
+        "Uruguay",
+        "Uzbekistan",
+        "Vatican City",
+        "Venezuela",
+        "Vietnam",
+        "Yemen"
+      ],
+      "Academic_Level": [
+        "Graduate",
+        "High School",
+        "Undergraduate"
+      ],
+      "Most_Used_Platform": [
+        "Facebook",
+        "Instagram",
+        "KakaoTalk",
+        "LINE",
+        "LinkedIn",
+        "Snapchat",
+        "TikTok",
+        "Twitter",
+        "VKontakte",
+        "WeChat",
+        "WhatsApp",
+        "YouTube"
+      ],
+      "Purpose_Of_Use": [
+        "Education",
+        "Entertainment",
+        "Networking",
+        "News"
+      ],
+      "Stress_Level": [
+        "High",
+        "Low",
+        "Medium",
+        "Very High"
+      ]
+    },
+    "country_counts": {
+      "Other": 1880,
+      "India": 389,
+      "USA": 355,
+      "Canada": 230,
+      "Australia": 198,
+      "UK": 185,
+      "Germany": 136,
+      "Mexico": 94,
+      "Turkey": 94,
+      "France": 87,
+      "Spain": 83,
+      "Ireland": 81,
+      "Japan": 77,
+      "Denmark": 77,
+      "Switzerland": 73,
+      "Nepal": 72,
+      "Italy": 67,
+      "Russia": 66,
+      "Sri Lanka": 59,
+      "Maldives": 57,
+      "Bangladesh": 53,
+      "Pakistan": 53,
+      "Poland": 50,
+      "South Korea": 38,
+      "China": 37,
+      "Brazil": 34,
+      "Singapore": 29,
+      "New Zealand": 25,
+      "Malaysia": 24,
+      "Netherlands": 23,
+      "UAE": 21,
+      "Finland": 20,
+      "Uzbekistan": 8,
+      "Afghanistan": 8,
+      "Qatar": 7,
+      "Sweden": 6,
+      "Norway": 6,
+      "Egypt": 6,
+      "Paraguay": 6,
+      "Cyprus": 6,
+      "Vietnam": 5,
+      "Argentina": 5,
+      "Costa Rica": 5,
+      "Romania": 5,
+      "Moldova": 5,
+      "Georgia": 5,
+      "Andorra": 5,
+      "Belgium": 4,
+      "Greece": 4,
+      "South Africa": 4,
+      "Peru": 4,
+      "Panama": 4,
+      "Trinidad": 4,
+      "Czech Republic": 4,
+      "Latvia": 4,
+      "Lithuania": 4,
+      "North Macedonia": 4,
+      "Lebanon": 4,
+      "Iraq": 4,
+      "Hong Kong": 3,
+      "Morocco": 3,
+      "Nigeria": 3,
+      "Slovakia": 3,
+      "Ukraine": 3,
+      "Kazakhstan": 3,
+      "Tajikistan": 3,
+      "Monaco": 3,
+      "San Marino": 3,
+      "Vatican City": 3,
+      "Albania": 3,
+      "Austria": 2,
+      "Portugal": 2,
+      "Philippines": 2,
+      "Indonesia": 2,
+      "Taiwan": 2,
+      "Israel": 2,
+      "Ghana": 2,
+      "Chile": 2,
+      "Venezuela": 2,
+      "Jamaica": 2,
+      "Bahamas": 2,
+      "Hungary": 2,
+      "Bulgaria": 2,
+      "Estonia": 2,
+      "Azerbaijan": 2,
+      "Malta": 2,
+      "Luxembourg": 2,
+      "Liechtenstein": 2,
+      "Kosovo": 2,
+      "Bahrain": 2,
+      "Oman": 2,
+      "Jordan": 2,
+      "Bhutan": 2,
+      "Thailand": 1,
+      "Kenya": 1,
+      "Colombia": 1,
+      "Ecuador": 1,
+      "Uruguay": 1,
+      "Bolivia": 1,
+      "Iceland": 1,
+      "Croatia": 1,
+      "Serbia": 1,
+      "Slovenia": 1,
+      "Belarus": 1,
+      "Kyrgyzstan": 1,
+      "Armenia": 1,
+      "Montenegro": 1,
+      "Bosnia": 1,
+      "Kuwait": 1,
+      "Yemen": 1,
+      "Syria": 1
+    }
+  },
+  "trained_at_utc": "2026-11-21T09:17:50.574972+00:00"
+}

@@ -3,5 +3,8 @@ __pycache__/
 .pytest_cache/
 .ipynb_checkpoints/
 *.py[cod]
-.commandcode/
-.superpowers/
+logs/*.log
+data/processed/*
+!data/processed/.gitkeep
+scripts/node_modules/
+~$*

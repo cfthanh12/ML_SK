@@ -35,6 +35,24 @@ FEATURE_COLUMNS = [
     "Stress_Level",
 ]
 
-MODEL_VERSION = "1.1.0"
-RANDOM_STATE = 42
-DEFAULT_CV_FOLDS = 5
+# --- Cấu hình dùng chung, đọc từ config/params.yaml ---------------------------
+from pathlib import Path as _Path
+
+import yaml as _yaml
+
+PROJECT_ROOT = _Path(__file__).resolve().parents[1]
+
+
+def load_params(path: _Path | None = None) -> dict:
+    """Read config/params.yaml (single source of hyperparameters and thresholds)."""
+    config_path = path or PROJECT_ROOT / "config" / "params.yaml"
+    with open(config_path, encoding="utf-8") as handle:
+        return _yaml.safe_load(handle)
+
+
+PARAMS = load_params()
+
+MODEL_VERSION = "1.2.0"
+RANDOM_STATE = PARAMS["split"]["random_state"]
+TEST_SIZE = PARAMS["split"]["test_size"]
+DEFAULT_CV_FOLDS = PARAMS["cv_folds"]
